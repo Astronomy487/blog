@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
-<body>
+<body style="--2: #FFC50C;">
   <div style="display: none;">$\newcommand{\norm}[1]{\left\lVert#1\right\rVert}$</div>
   <div style="display: none;">$\newcommand{\em}[1]{{\color[rgb]{1,0.4,0}{#1}}}$</div>
-  <div style="display: none;">$\newcommand{\cc}[1]{{\color{cyan}{#1}}}$</div>
-  <div style="display: none;">$\newcommand{\cy}[1]{{\color{yellow}{#1}}}$</div>
-  <div style="display: none;">$\newcommand{\cm}[1]{{\color{magenta}{#1}}}$</div>
+  <div style="display: none;">$\newcommand{\cc}[1]{{\color[rgb]{1,0.2,0.4}{#1}}}$</div>
+  <div style="display: none;">$\newcommand{\cm}[1]{{\color[rgb]{0.1,0.8,1}{#1}}}$</div>
   <h1>What are the basis functions?</h1>
   <p summary>I've been thinking about making bases for funny vector spaces: all functions, or all smooth functions, or all continuous functions. I mess around with the idea of creating a non-analytic function out of linearly combining infinitely many analytic functions; this doesn't violate the vector space axioms, it's just strange that you can sometimes-but-not-always perform infinite linear combinations and stay in the vector space.</p>
   <h2>Vector spaces</h2>
@@ -44,6 +43,7 @@
   <p>If we can see each of these inputs as entries, then I think it's obvious what the basis set of everywhere-defined functions should be.</p>
   <p>Basis function number $k$, for every $k\in\mathbb{R}$, should be defined as $0$ for all inputs, except returning $1$ at input $k$.</p>
   <p>$$\vec{b}_k(x)=\begin{cases}1& x=k\\0 & x\neq k\end{cases}$$</p>
+  <p>(Is there a name for this kind of function? It's like a <a href="https://en.wikipedia.org/wiki/Dirac_delta_function">Dirac delta function</a> except it peaks at $1$, not $\infty$, and the integral is $0$.)</p>
   <p>These can in fact be combined to make any function you like. For example, the function $x^2$ outputs $4$ at input $2$, and thus it was constructed with $4$ multiples of $\vec{b}_2$. It was also made with $9$ multiples of $\vec{b}_3$, and so on for every real number.</p>
   <p>This satisfies the criteria for a basis vector:</p>
   <ul>
@@ -123,5 +123,41 @@
   </ul>
   <p>Feel like I'm missing something? Please enlighten me, I desparately want to learn more about this!</p>
   <script src="../script.js"></script>
+  <script>
+    //custom : graph1
+    for (let div of document.querySelectorAll("graph1")) {
+      let [xmin, xmax, ymin, ymax, width, height] = ["xmin", "xmax", "ymin", "ymax", "width", "height"].map(x => parseFloat(div.getAttribute(x)));
+      width = 768;
+      let transformations = eval(div.getAttribute("lambda"));
+      if (typeof transformations == "function") transformations = [transformations];
+      let colors = div.hasAttribute("colors") ? div.getAttribute("colors").split(",") : [];
+      let canvas = div.appendChild(document.createElement("canvas"));
+      canvas.setAttribute("width", width);
+      canvas.setAttribute("height", height);
+      div.style.width = width;
+      div.style.height = height;
+      let context = canvas.getContext("2d");
+      context.lineWidth = 2;
+      
+      //do the axes
+      context.beginPath();
+      context.stroke();
+      
+      for (let i = 0; i < transformations.length; i++) {
+        //do the curve
+        if (i < colors.length) context.strokeStyle = colors[i]
+        else context.strokeStyle = "#FFC50C";
+        context.beginPath();
+        for (let x = 0; x < width; x++) {
+          let t = x/(width-1); //0 <= t <= 1
+          let f = transformations[i](t*(xmax-xmin)+xmin); //f according to function output space
+          //f -> y : ymax -> 0 , ymin -> height-1
+          let outt = 1 - (f - ymin) / (ymax - ymin); //0 for biggest output, 1 for smallest output
+          context.lineTo(x, outt*(height-1));
+        }
+        context.stroke();
+      }
+    }
+  </script>
 </body>
 </html>

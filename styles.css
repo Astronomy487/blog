@@ -1,18 +1,17 @@
-
 html {
   scroll-behavior: smooth;
 }
 
 :root {
 	--1: #ddd;
-	--2: #f60;
+	--2: #fff;
 	--3: #fff;
 	--4: #111;
 	--5: #777;
 }
 
 body {
-	font-family: sans-serif;
+	font-family: Tahoma, sans-serif;
 	background-color: var(--4);
 	color: var(--1);
 	font-size: 1.25rem;
@@ -144,7 +143,6 @@ nav {
 	transform: translateY(-50%);
 	left: 2rem;
 	width: 24rem;
-	transition: 0.2s opacity;
 }
 nav a {
 	display: block;
@@ -170,4 +168,65 @@ nav a[nobefore]:hover {
 p[summary]::before {
 	content: '[summary] ';
 	color: var(--5);
+}
+input {
+	accent-color: var(--2);
+}
+
+.modal {
+	position: fixed;
+	background-color: var(--4);
+	border: solid 1px var(--5);
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: none;
+	padding: 2rem 3rem;
+	box-shadow: 0 0 4rem black;
+	animation-fill-mode: forward;
+	z-index: 100;
+}
+@keyframes modal-in {
+	from {opacity: 0; transform: translate(-50%, calc(-50% + 4rem)) scale(0.875);}
+}
+@keyframes modal-out {
+	to {opacity: 0; transform: translate(-50%, calc(-50% + 4rem)) scale(0.875);}
+}
+
+input, button {
+	background-color: inherit;
+	border: solid 1px var(--5);
+	font-family: inherit;
+	font-size: inherit;
+	padding: 0.25rem;
+	color: inherit;
+	margin: 0.5rem 0;
+}
+
+button {
+	padding: 0.5rem 1rem;
+	display: block;
+	cursor: pointer;
+}
+button:hover {
+	border-color: var(--2);
+	color: var(--2);
+}
+.modal .close-modal {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: none;
+	background-color: var(--2);
+	margin: 0;
+	font-size: 1.75rem;
+	line-height: 2.25rem;
+	text-align: center;
+}
+.modal .close-modal:hover {
+	background-color: var(--3);
+	color: var(--4);
+}
+hr {
+	border: solid 1px var(--5);
 }
